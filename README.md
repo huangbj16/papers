@@ -4,10 +4,10 @@
 
 ## 结果图
 ### Ray tracing
-![ray_tracing](https://github.com/huangbj16/papers/blob/master/draw.png)
+![ray_tracing](https://github.com/huangbj16/papers/blob/master/draww.png)
 ### Progressive photon mapping
-![ppm](https://github.com/huangbj16/papers/blob/master/11.png)
-![ppm](https://github.com/huangbj16/papers/blob/master/4.png)
+![ppm](https://github.com/huangbj16/papers/blob/master/111.png)
+![ppm](https://github.com/huangbj16/papers/blob/master/44.png)
 
 ## 实现内容
 ### 基本效果：反射，折射，阴影。
