@@ -3,7 +3,8 @@
 ## 2018年6月
 
 ### 结果图
-![Image of Yaktocat](D:/2018spring/图形学/lighttrack/ppm/500round/4.png)
+![ray_tracing](https://github.com/huangbj16/papers/blob/master/draw.png)
+
 
 
 结果图，实现的内容及对应代码段
