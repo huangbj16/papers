@@ -4,10 +4,10 @@
 
 ## 结果图
 ### Ray tracing
-![ray_tracing](https://github.com/huangbj16/papers/blob/master/draww.png)
+![ray_tracing](https://github.com/huangbj16/papers/blob/master/draw.png)
 ### Progressive photon mapping
-![ppm](https://github.com/huangbj16/papers/blob/master/111.png)
-![ppm](https://github.com/huangbj16/papers/blob/master/44.png)
+![ppm](https://github.com/huangbj16/papers/blob/master/11.png)
+![ppm](https://github.com/huangbj16/papers/blob/master/4.png)
 
 ## 实现内容
 
@@ -223,7 +223,64 @@ void HitPointList::AddPhoton(Vec3 point, Vec3 dir, Color color)
 		}
 	}
 ```
+### 其它：软阴影，UV贴图。
+```C++
+//面光源带位置扰动
+Vec3 Plainlight::Getpos()
+{
+	double w = (double)rand() / RAND_MAX - 0.5;//(-0.5,0.5)
+	double l = (double)rand() / RAND_MAX - 0.5;
+	Vec3 ret(center);
+	ret.x += w*width;
+	ret.z += l*length;
+	return ret;
+}
+```
+```C++
+//UV贴图
+Color Material::Getcolor(double u, double v)
+{
+	if (haveveins && u >= 0 && u <= 1 && v >= 0 && v <= 1) {//有贴图
+		int x = veins.rows * u;
+		int y = veins.cols * v;
+		cv::Vec3b v = veins.at<cv::Vec3b>(x, y);
+		Color c(v[2], v[1], v[0]);
+		c /= 255;
+		return c;
+	}
+	else {//无贴图
+		return color;
+	}
+}
+```
 
-结果图，实现的内容及对应代码段
-:
-简述实现过程，比如牛顿迭代
+## 实现过程
+- 基本功能在此就不介绍了。  
+- 参数曲面求交使用的是牛顿迭代的方法。
+  - 给每一个bezier曲面构造一个沿坐标轴方向的包围盒，光线先和包围盒求交，如果有交点，再牛顿迭代。
+  - 利用包围盒求交时的参数作为牛顿迭代的初始值，每个初始值迭代10轮，一共10组初始值。如果最后误差达到要求范围，则返回交点，法向和uv等信息。  
+- PPM的实现参考了原作者的论文。
+  - 先进行一轮正常的raytracing，计算每条光线的碰撞点（hitpoint），用hash函数组织好。
+  - 接下来，每发射一轮光子，
+    - 先将所有光子根据碰撞点归到每个hitpoint的光通量中。
+    - 再根据每个hitpoint的光通量，光子数和半径计算出hitpoint的颜色。
+    - 将hitpoint加权求和作为视线中视点的颜色。
+- 软阴影的实现是把一个面光源表示为16个带位置扰动的点，每次算阴影的时候和这些点求阴影即可。
+- UV贴图。任何参数模型上的点都可以定义一个uv(范围是(0,1))，把uv和纹理图片的坐标对应即可。
+  - bezier曲面：uv是已经定义好的，直接使用就可以。
+  - 球面：求出球面上的点在球坐标下的φ和θ，用φ/2π，θ/2π作为u，v。
+  - 平面：取法向中较小的两维（比如（0,1,0），则取x轴和z轴），平面上的任意一点P，取Px和Pz的小数部分作为u和v。
+- 另外，在求交的时候，我把交点，法向和uv打包传输，发现这是一个好方法，避免了很多不必要的多余计算和函数调用。
+
+## 总结
+
+
+
+
+
+
+
+
+
+
+
