@@ -3,8 +3,11 @@
 ## 2018年6月
 
 ### 结果图
+Ray tracing
 ![ray_tracing](https://github.com/huangbj16/papers/blob/master/draw.png)
-
+Progressive photon mapping
+![ppm](https://github.com/huangbj16/papers/blob/master/11.png)
+![ppm](https://github.com/huangbj16/papers/blob/master/4.png)
 
 
 结果图，实现的内容及对应代码段
